@@ -36,11 +36,11 @@ spec:
           args:
             - --certs=/certs
             - --command=/usr/bin/create-keystore.sh /certs/tls.pem /certs/tls-key.pem /etc/ssl/certs/acp-root.crt
-            - --domain=hocs-templates.${KUBE_NAMESPACE}.svc.cluster.local
+            - --domain=hocs-templates.${ENVIRONMENT}.svc.cluster.local
             - --domain=localhost
             - --onetime=true
           env:
-            - name: KUBE_NAMESPACE
+            - name: ENVIRONMENT
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
@@ -71,11 +71,11 @@ spec:
                 - SETGID
           args:
             - --certs=/certs
-            - --domain=hocs-templates.${KUBE_NAMESPACE}.svc.cluster.local
+            - --domain=hocs-templates.${ENVIRONMENT}.svc.cluster.local
             - --expiry=8760h
             - --command=/usr/local/scripts/trigger_nginx_reload.sh
           env:
-            - name: KUBE_NAMESPACE
+            - name: ENVIRONMENT
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
@@ -153,7 +153,7 @@ spec:
                 - SETGID
           env:
             - name: JAVA_OPTS
-              value: '-Xms384m -Xmx1536m -XX:+UseG1GC -Djavax.net.ssl.trustStore=/etc/keystore/truststore.jks -Dhttps.proxyHost=hocs-outbound-proxy.{{.KUBE_NAMESPACE}}.svc.cluster.local -Dhttps.proxyPort=31290 -Dhttp.nonProxyHosts=*.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+              value: '-Xms384m -Xmx1536m -XX:+UseG1GC -Djavax.net.ssl.trustStore=/etc/keystore/truststore.jks -Dhttps.proxyHost=hocs-outbound-proxy.{{.ENVIRONMENT}}.svc.cluster.local -Dhttps.proxyPort=31290 -Dhttp.nonProxyHosts=*.{{.ENVIRONMENT}}.svc.cluster.local'
             - name: JDK_TRUST_FILE
               value: '/etc/keystore/truststore.jks'
             - name: SERVER_PORT
@@ -161,11 +161,11 @@ spec:
             - name: ENDPOINTS_INFO_ENABLED
               value: 'false'
             - name: HOCS_CASE_SERVICE
-              value: 'https://hocs-casework.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+              value: 'https://hocs-casework.{{.ENVIRONMENT}}.svc.cluster.local'
             - name: HOCS_INFO_SERVICE
-              value: 'https://hocs-info-service.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+              value: 'https://hocs-info-service.{{.ENVIRONMENT}}.svc.cluster.local'
             - name: HOCS_DOCUMENT_SERVICE
-              value: 'https://hocs-docs.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+              value: 'https://hocs-docs.{{.ENVIRONMENT}}.svc.cluster.local'
             - name: HOCS_BASICAUTH
               valueFrom:
                 secretKeyRef:
